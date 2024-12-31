@@ -1,6 +1,8 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import requests
+import os
+from dotenv import load_dotenv
 
 def connect_mongo(uri):
     # Criando um novo cliente e conectando ao servidor
@@ -33,7 +35,16 @@ def insert_data(col, data):
 
 if __name__ == "__main__":
     
-    client = connect_mongo("mongodb+srv://dcamposdev:sodebirra@cluste-pipeline.iwo5r.mongodb.net/?retryWrites=true&w=majority&appName=Cluste-pipeline")
+    load_dotenv()
+
+    user = os.getenv("MONGO_USER")
+    password = os.getenv("MONGO_PASSWORD")
+    cluster = os.getenv("MONGO_CLUSTER")
+    app_name = os.getenv("MONGO_APP_NAME")
+
+    uri = f"mongodb+srv://{user}:{password}@{cluster}.iwo5r.mongodb.net/?retryWrites=true&w=majority&appName={app_name}"
+
+    client = connect_mongo(uri)
     db = create_connect_db(client, "db_produtos")
     col = create_connect_collection(db, "produtos")
 
